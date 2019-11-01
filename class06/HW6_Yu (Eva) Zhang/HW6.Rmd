@@ -1,0 +1,27 @@
+---
+title: "HW6"
+author: "Yu Zhang"
+date: "2019/10/18"
+output: pdf_document
+---
+
+```{r}
+library(bio3d)
+prostr <- function(x, chain_name = "A", elety_name = "CA", yl = "Bfactor", atom_col = "b"){
+  s <- read.pdb(x)
+  s.chain <- trim.pdb(s, chain = chain_name, elety = elety_name)
+  s.atom <- s.chain$atom[,atom_col]
+  plotb3(s.atom, sse=s.chain, typ="l", ylab = yl)
+}
+prostr("4AKE")
+#Inputs: PDB ID (e.g., "4AKE")
+#Optional Inputs: we can also specify which chain or atom 
+#or ylabel or elemet within dataframe atom we want.
+
+#Process: the function first reads the pdb file and choose 
+#chainA, atom CA, and b, then makes a plot 
+
+#Output: the plot for the specified protein with x axis 
+#representing residues and y axis representing B factor
+```
+
