@@ -1,0 +1,61 @@
+---
+title: "class09"
+author: "Yu Zhang"
+date: "2019/10/30"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+fna.data <- "WisconsinCancer.csv"
+wisc.df <- read.csv(fna.data)
+table(wisc.df$diagnosis)
+colnames(wisc.df)
+gg <- grep('_mean', colnames(wisc.df), value = T)
+xx <- wisc.df[gg]
+```
+Here we examine data from `r nrow(wisc.df)` patient samples.
+In this data-set we have `r table(wisc.df$diagnosis)[1]` Breast Cancer diagnosis and `r table(wisc.df$diagnosis)['M']`malignant diagnosis.
+```{r}
+wisc.data <- as.matrix(wisc.df[,3:32])
+row.names(wisc.data) <- wisc.df$id
+diagnosis <- wisc.df$diagnosis
+colMeans(wisc.data)
+round(apply(wisc.data,2,sd),3) 
+# where 2 is the margin: when MARGIN=1 , it applies over rows, whereas with MARGIN=2 , it works over columns
+# we want the sd to be similar but area_mean is on a different scale ~300 so we need to scale in pca
+```
+```{r}
+wisc.pr <- prcomp(wisc.data, scale=T)
+x <- summary(wisc.pr)
+```
+
+```{r}
+plot(wisc.pr$x[,1],wisc.pr$x[,2], col=diagnosis, xlab = "PC1", ylab = "PC2")
+x$importance[2,"PC1"]
+which(x$importance[3,]>0.9)[1]
+```
+##
+```{r}
+data.scaled <- scale(wisc.data)
+wisc.hclust <- hclust(dist(data.scaled), method = "complete")
+wisc.hclust
+plot(wisc.hclust)
+abline(h=19, col="red", lty=2)
+
+wisc.hclust2 <- hclust(dist(wisc.pr$x[,1:3]))
+wisc.hclust2
+plot(wisc.hclust2)
+abline(h=19, col="red", lty=2)
+
+wisc.hclust.clusters <- cutree(wisc.hclust, k = 4)
+table(wisc.hclust.clusters, diagnosis)
+wisc.hclust.clusters2 <- cutree(wisc.hclust2, k = 4)
+table(wisc.hclust.clusters2, diagnosis)
+```
+
+## K-means
+can also do spell check in R: edit -> check spelling
