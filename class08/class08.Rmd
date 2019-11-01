@@ -1,0 +1,104 @@
+---
+title: "class08"
+author: "Yu Zhang"
+date: "2019/10/25"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## K-means
+```{r}
+tmp <- c(rnorm(30,-3), rnorm(30,3))
+x <- cbind(x=tmp, y=rev(tmp))
+plot(x)
+# k-means algorithm with 2 centers, run 20 times
+k=kmeans(x, centers=2, nstart=20)
+# sum of squares: between_SS / total_SS =  91.8 %
+k$size
+k$cluster
+k$centers
+table(k$cluster)
+#plot(x, col = "red") 
+#or col = 3
+plot(x, col = k$cluster)
+points(k$centers, col = "blue", pch  = 15)
+```
+## HC
+```{r}
+# First we need to calculate point (dis)similarity
+# as the Euclidean distance between observations
+dist_matrix <- dist(x)
+# The hclust() function returns a hierarchical
+# clustering model
+hc <- hclust(d = dist_matrix)
+# the print method is not so useful here
+# or
+# hc <- hclust(dist(x))
+hc 
+plot(hc)
+abline(h = 6, col = "red")
+table(cutree(hc, h=4))
+grps <- cutree(hc, k =2)
+plot(x,col=grps)
+```
+
+##
+```{r}
+# Step 1. Generate some example data for clustering
+x <- rbind(
+ matrix(rnorm(100, mean=0, sd = 0.3), ncol = 2), # c1
+ matrix(rnorm(100, mean = 1, sd = 0.3), ncol = 2), # c2
+ matrix(c(rnorm(50, mean = 1, sd = 0.3), # c3
+ rnorm(50, mean = 0, sd = 0.3)), ncol = 2))
+colnames(x) <- c("x", "y")
+# Step 2. Plot the data without clustering
+plot(x)
+# Step 3. Generate colors for known clusters
+# (just so we can compare to hclust results)
+col <- as.factor( rep(c("c1","c2","c3"), each=50) )
+plot(x, col=col)
+```
+
+```{r}
+k2 <- kmeans(x,centers = 3, nstart = 20)
+table(col,k2$cluster)
+hc2 <- hclust(dist(x))
+plot(hc2)
+grps2 <- cutree(hc, k =7)
+table(grps2)
+```
+
+## PCA Examples
+```{r}
+mydata <- read.csv("https://tinyurl.com/expression-CSV",
+ row.names=1)
+head(mydata) 
+## lets do PCA
+pca <- prcomp(t(mydata), scale=TRUE)
+## See what is returned by the prcomp() function
+attributes(pca) 
+## A basic PC1 vs PC2 2-D plot
+plot(pca$x[,1], pca$x[,2]) 
+## Variance captured per PC
+pca.var <- pca$sdev^2 
+pca.var.per <- round(pca.var/sum(pca.var)*100, 1) 
+pca.var.per
+summary(pca)
+barplot(pca.var.per, main="Scree Plot",
+ xlab="Principal Component", ylab="Percent Variation")
+colvec <- as.factor( substr( colnames(mydata), 1, 2) )
+plot(pca$x[,1], pca$x[,2], col=colvec, pch=16,
+ xlab=paste0("PC1 (", pca.var.per[1], "%)"),
+ ylab=paste0("PC2 (", pca.var.per[2], "%)"))
+identify(pca$x[,1], pca$x[,2], labels=colnames(mydata)) 
+
+plot(pca$x[,1:2], col = c(rep("red",5),rep("blue",5)))
+
+
+```
+
+
+

@@ -1,0 +1,24 @@
+---
+title: "class08_2"
+author: "Yu Zhang"
+date: "2019/10/25"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+x <- read.csv("UK_foods.csv")
+dim(x)
+head(x)
+rownames(x) <- x[,1] #add a new col named x[,1]
+x <- x[,-1] #removes the col
+head(x)
+x <- read.csv("UK_foods.csv", row.names=1)
+head(x)
+barplot(as.matrix(x), beside=T, col=rainbow(nrow(x)))
+pairs(x, col=rainbow(10), pch=16)
+```
+
