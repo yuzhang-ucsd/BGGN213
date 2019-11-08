@@ -25,7 +25,11 @@ protein <- atom.select(pdb, "protein", value = T)
 write.pdb(protein, file = "1hsg_protein.pdb")
 ```
 
-```{r}
+## Processing docking results
 
+Need a pdb file to view in VMD.
+```{r}
+res <- read.pdb("all.pdbqt", multi=TRUE)
+write.pdb(res, "results.pdb")
 ```
 
