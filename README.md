@@ -1,3 +1,8 @@
 # BGGN213 Bioinformtics Class
 BGGN213
-This is my work from [BGGN213 at UC San Diego](https://bioboot.github.io/bggn213_F19/).
+This is my work from [BGGN213 at UC San Diego](https://bioboot.github.io/bggn213_F19/) from Fall 2019.
+
+Contents:
+- Class05 [Data exploration and visualization in R](https://github.com/yuzhang-ucsd/BGGN213/blob/master/class05/class05.md)
+- Class06 [Why, when and how of writing your own R functions](https://github.com/yuzhang-ucsd/BGGN213/blob/master/class06/class06.md)
+- Class07 [Bioinformatics R packages from CRAN and BioConductor](https://github.com/yuzhang-ucsd/BGGN213/blob/master/class07/class07.md)
